@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ElevatedButtonWidget extends StatelessWidget {
   const ElevatedButtonWidget({
     super.key, required this.lable, required this.onTap,
+    this.bg=Colors.blue
   });
   final String lable;
   final Function()onTap;
+  final Color bg;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +19,10 @@ class ElevatedButtonWidget extends StatelessWidget {
       child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
+
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.r)),
-              backgroundColor: Colors.blue,
+              backgroundColor: bg,
               minimumSize: Size(double.infinity, 40.h)),
           child:  Text(
             lable,

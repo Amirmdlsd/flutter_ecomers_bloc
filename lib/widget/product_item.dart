@@ -1,5 +1,7 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled2/pages/product_detail/bloc/detail_bloc.dart';
@@ -55,30 +57,37 @@ class ProductItem extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                height: 15.h,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Center(
-                  child: Text(
-                    '%${productModel.discount}',
-                    style: TextStyle(color: Colors.white, fontSize: 12.sp),
+              Visibility(
+                visible: productModel.discount!>0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  height: 15.h,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '%${productModel.discount}',
+                      style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                    ),
                   ),
                 ),
               ),
-              Text(
-                '${productModel.price}',
-                style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                    decorationThickness: 1.w),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Visibility(
+                visible: productModel.discount!>0,
+
+                child: Text(
+                  '${productModel.price}',
+                  style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                      decorationThickness: 1.w),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ]),
             SizedBox(height: 10.h),

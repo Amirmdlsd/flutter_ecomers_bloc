@@ -19,31 +19,42 @@ class RegisterController {
     try {
       EasyLoading.show(
           dismissOnTap: true,
-          indicator: const CircularProgressIndicator(color: Colors.white));
+       );
 
       UserCredential credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       credential.user?.sendEmailVerification();
       credential.user?.updateDisplayName(name);
+      AuthManager.saveUId(credential.user!.uid??'');
 
       //   add to db
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
-      users.add({
-        "id": randomString(10),
-        'username': name,
-        'email': email,
+      users.doc(credential.user?.uid).set({
+        'username': credential.user?.displayName,
+        'email': credential.user?.email,
+        'avatar': credential.user?.photoURL,
+        'location': const GeoPoint(32.0, 31.2)
       });
 
       debugPrint('name is ${credential.user?.displayName}');
       AuthManager.setBool();
       EasyLoading.dismiss();
       ShowToast.ShowMessage("ثبت نام انجام شد.لطفا ایمیل خودتان را تایید کنید");
-      Navigator.pushNamedAndRemoveUntil(context, '/homePage', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false);
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();
       debugPrint(e.code);
-      ShowToast.ShowMessage(e.code);
+      switch(e.code){
+        case 'email-already-in-use':
+          ShowToast.ShowMessage('این ایمیل قبلا ثبت نام شده است!');
+          break;
+          case 'invalid-email':
+          ShowToast.ShowMessage('این ایمیل نامعتبر است!');
+          break;
+
+      }
+
     } catch (e) {
       EasyLoading.dismiss();
 

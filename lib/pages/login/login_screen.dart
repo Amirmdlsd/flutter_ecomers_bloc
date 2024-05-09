@@ -1,9 +1,13 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled2/gen/assets.gen.dart';
 import 'package:untitled2/pages/login/bloc/login_event.dart';
 import 'package:untitled2/pages/login/bloc/login_state.dart';
+import 'package:untitled2/pages/main_screen/bloc/main_bloc.dart';
+import 'package:untitled2/pages/main_screen/bloc/main_event.dart';
 import 'package:untitled2/widget/text_field_widget.dart';
 
 import '../../widget/button_widget.dart';
@@ -49,7 +53,29 @@ class LoginScreen extends StatelessWidget {
                   icon: Icons.password,
                   controller: passController,
                 ),
-                SizedBox(height: 110.h),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('هنوز ثبت نام نکردم',
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        context.read<MainBloc>().add(ChangeIndexEvent(0));
+                        Navigator.pushReplacementNamed(context, '/registerScreen');
+                      },
+                      child: Text('ثبت نام',
+                          style: TextStyle(
+                              fontSize: 14.sp, color: Colors.lightBlue)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 60.h),
                 ElevatedButtonWidget(
                   lable: "تایید",
                   onTap: () {
@@ -63,5 +89,7 @@ class LoginScreen extends StatelessWidget {
         },
       )),
     );
+
   }
+
 }

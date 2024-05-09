@@ -3,7 +3,7 @@ import 'package:untitled2/pages/main_screen/bloc/main_event.dart';
 import 'package:untitled2/pages/main_screen/bloc/main_state.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
-  MainBloc() : super(MainState()) {
+  MainBloc() : super(MainState(currentIndex: 0)) {
     on<ChangeIndexEvent>(_changeIndex);
   }
 

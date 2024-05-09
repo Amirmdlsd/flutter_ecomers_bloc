@@ -7,12 +7,14 @@ import 'package:untitled2/pages/main_screen/bloc/main_bloc.dart';
 import 'package:untitled2/pages/main_screen/bloc/main_event.dart';
 import 'package:untitled2/pages/main_screen/bloc/main_state.dart';
 import 'package:untitled2/pages/profile_screen/profile_screen.dart';
+import 'package:untitled2/utils/auth_manager.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('userid is =${AuthManager.getUId()}');
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
         return Scaffold(
@@ -27,6 +29,7 @@ class MainScreen extends StatelessWidget {
               ])),
           bottomNavigationBar: BottomNavigationBar(
             onTap: (value) {
+              debugPrint("index is $value");
               context.read<MainBloc>().add(ChangeIndexEvent(value));
             },
             currentIndex: context.read<MainBloc>().state.currentIndex,

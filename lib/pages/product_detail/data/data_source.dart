@@ -18,6 +18,7 @@ class ProductDetailDataSource extends IProductDetailDataSource {
       if (e.exists) {
         return ProductModel(
             id: e.id,
+            pId: e['pId'],
             catId: e['catId'],
             title: e['title'],
             image: e['image'],

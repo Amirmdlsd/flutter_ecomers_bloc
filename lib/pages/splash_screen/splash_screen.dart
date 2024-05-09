@@ -36,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 3),
       () async {
         var check = await AuthManager.checkUserIsLoginOrRegister();
+        debugPrint('----------------$check');
         if (check) {
           Navigator.pushNamedAndRemoveUntil(
               context, '/mainScreen', (route) => false);

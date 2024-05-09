@@ -17,13 +17,23 @@ class LoginController {
       UserCredential credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       AuthManager.setBool();
+      AuthManager.saveUId(credential.user!.uid ?? '');
+
       EasyLoading.dismiss();
       ShowToast.ShowMessage('با موفقیت وارد شدید');
-      Navigator.pushNamedAndRemoveUntil(context, '/mainScreen', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/mainScreen', (route) => false);
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();
       debugPrint(e.code);
-      ShowToast.ShowMessage(e.code);
+      switch (e.code) {
+        case 'network-request-failed':
+          ShowToast.ShowMessage('خطا در برقراری ارتیاط');
+          break;
+        case 'invalid-email':
+          ShowToast.ShowMessage('این ایمیل نامعتبر است!');
+          break;
+      }
     } catch (e) {
       EasyLoading.dismiss();
 

@@ -5,10 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:untitled2/locator.dart';
 import 'package:untitled2/pages/%20product_list/bloc/product_bloc.dart';
 import 'package:untitled2/pages/%20product_list/data/repository.dart';
 import 'package:untitled2/pages/%20product_list/product_list_screen.dart';
+import 'package:untitled2/pages/basket_screen/bloc/basket/bloc.dart';
+import 'package:untitled2/pages/basket_screen/bloc/basket_bloc.dart';
+import 'package:untitled2/pages/basket_screen/data/model/basket_model.dart';
 import 'package:untitled2/pages/home_page/bloc/home_bloc.dart';
 import 'package:untitled2/pages/home_page/home_screen.dart';
 import 'package:untitled2/pages/login/bloc/login_bloc.dart';
@@ -22,6 +27,11 @@ import 'package:untitled2/pages/registerPage/register_page.dart';
 import 'package:untitled2/pages/splash_screen/splash_screen.dart';
 
 Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter<BasketModel>(BasketModelAdapter());
+
+  await Hive.openBox<BasketModel>('basket');
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -30,6 +40,7 @@ Future<void> main() async {
           messagingSenderId: '82980735975',
           projectId: 'ecomes-4dc0f'));
   await serviveLocator();
+
   runApp(const MyApp());
 }
 
@@ -47,19 +58,24 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => HomeBLoc()),
         BlocProvider(create: (context) => ProductDetailBloc(locator())),
         BlocProvider(create: (context) => ProductListBloc(locator())),
+        BlocProvider(create: (context) => NextBasketBloc(locator())),
+        BlocProvider(create: (context) => BasketBloc(locator())),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
+          theme: ThemeData(),
           routes: {
             '/homePage': (context) => const HomeScreen(),
             '/mainScreen': (context) => const MainScreen(),
+            '/registerScreen':(context) => const RegisterScreen(),
             '/loginScreen': (context) => LoginScreen(),
             '/': (context) => const SplashScreen(),
             '/productDetailScreen': (context) => const ProductDetailScreen(),
-            ProductListScreen.productListScreen: (context) => const ProductListScreen()
+            ProductListScreen.productListScreen: (context) =>
+                const ProductListScreen()
           },
           builder: EasyLoading.init(),
           localizationsDelegates: const [
@@ -74,7 +90,7 @@ class MyApp extends StatelessWidget {
           locale: const Locale('fa'),
           debugShowCheckedModeBanner: false,
           title: 'Ecomers',
-          initialRoute:'/',
+          initialRoute: '/',
         ),
       ),
     );

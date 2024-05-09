@@ -55,6 +55,8 @@ class HomeDataSource extends IHomeDataSource {
       return querySnapshot.docs.where((p) => p['isHot'] == true).map((e) {
         return ProductModel(
             id: e.id,
+            pId: e['pId'],
+
             catId: e['catId'],
             title: e['title'],
             image: e['image'],
@@ -81,6 +83,7 @@ class HomeDataSource extends IHomeDataSource {
           .map((e) {
         return ProductModel(
             id: e.id,
+            pId: e['pId'],
             catId: e['catId'],
             title: e['title'],
             image: e['image'],

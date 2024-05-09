@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   //slider
                   state.slider.fold(
-                    (l) => const Text('خطا'),
+                    (l) =>  Text(l),
                     (r) => HomeSlider(sliderList: r),
                   ),
                   SizedBox(height: 20.h),
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   //   amazing product
                   state.amazingProduct.fold(
-                      (l) => const Text('error'),
+                      (l) =>  Text(l.toString()),
                       (amazingProduct) => HomeScreenRowListView(
                             productList: amazingProduct,
                             first: 'پیشنهاد',

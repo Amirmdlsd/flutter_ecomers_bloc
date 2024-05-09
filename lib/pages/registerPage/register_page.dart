@@ -57,7 +57,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   icon: Icons.password,
                   controller: passController,
                 ),
-                SizedBox(height: 80.h),
+                SizedBox(height: 30.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('قبلا ثبت ناکردم',
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                    SizedBox(
+                      width: 25.w,
+                    ),
+                    GestureDetector(
+                      onTap: ()=>Navigator.pushReplacementNamed(context, '/loginScreen'),
+                      child: Text('ورودبه حساب',
+                          style: TextStyle(
+                              fontSize: 14.sp, color: Colors.lightBlue)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 25.h),
                 ElevatedButtonWidget(
                   lable: 'ثبت نام',
                   onTap: () {
