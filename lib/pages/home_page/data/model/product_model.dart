@@ -1,6 +1,6 @@
 class ProductModel {
   String? id;
-  int? pId;
+  num? pId;
   String? catId;
   String? title;
   String? image;

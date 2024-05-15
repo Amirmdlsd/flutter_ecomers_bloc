@@ -21,6 +21,8 @@ class NextBasketBloc extends Bloc<NextBasketEvent, NextBasketState> {
       var all = await _repo.getAllBasket();
       emit(NextBasketGetAllItem(all));
     });
+
+
   }
 
   Future<void> _addToBasket(
@@ -28,5 +30,7 @@ class NextBasketBloc extends Bloc<NextBasketEvent, NextBasketState> {
     emit(NextBasketLoadinState());
     var add = await _repo.addToBasket(event.basketModel);
     emit(AddToNextBasketResponseState(add));
+    var all = await _repo.getAllBasket();
+    emit(NextBasketGetAllItem(all));
   }
 }

@@ -15,4 +15,19 @@ class IncreaseCounterEvent extends BasketEvent {
   final ProductModel productModel;
 
   IncreaseCounterEvent(this.productModel);
+
 }
+
+
+class DecreaseCounterEvent extends BasketEvent{
+  num pId;
+
+  DecreaseCounterEvent(this.pId);
+}
+class DeleteItemEvent extends BasketEvent{
+  num pId;
+
+  DeleteItemEvent(this.pId);
+}
+
+

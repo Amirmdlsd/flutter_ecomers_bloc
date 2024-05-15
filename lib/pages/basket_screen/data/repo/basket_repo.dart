@@ -8,6 +8,8 @@ abstract class BasketRepo {
       ProductModel productModel);
 
   Future<Either<String, List<BasketItemModel>>> getBasketItem();
+  Future<Either<String,String>> removeCounter(num pId);
+  Future<Either<String,String>>deleteItemFromBasket(num pId);
 }
 
 class BasketRemoteRepo extends BasketRepo {
@@ -31,6 +33,26 @@ class BasketRemoteRepo extends BasketRepo {
     try {
       var response = await _dataSource.getBasketList();
       return right(response);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, String>> removeCounter(num pId) async{
+    try {
+      var response = await _dataSource.decreaseItemCount(pId);
+      return right('');
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, String>> deleteItemFromBasket(num pId) async{
+    try {
+      var response = await _dataSource.deleteFromBasket(pId);
+      return right('از سبدخریدحذف شد');
     } catch (e) {
       return left(e.toString());
     }

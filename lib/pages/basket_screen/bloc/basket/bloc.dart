@@ -20,10 +20,23 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
       var basket = await _repo.getBasketItem();
       emit(GetAllBasketItemState(basket));
     });
+
     on<IncreaseCounterEvent>((event, emit) async {
+
       await _repo.addToBasket(event.productModel);
       var basket = await _repo.getBasketItem();
       emit(GetAllBasketItemState(basket));
+    });
+
+    on<DecreaseCounterEvent>((event, emit)async {
+      await _repo.removeCounter(event.pId);
+      var basket = await _repo.getBasketItem();
+      emit(GetAllBasketItemState(basket));
+    });
+    on<DeleteItemEvent>((event, emit) async {
+      await _repo.deleteItemFromBasket(event.pId);
+      var all = await _repo.getBasketItem();
+      emit(GetAllBasketItemState(all));
     });
   }
 }

@@ -13,6 +13,7 @@ abstract class IHomeDataSource {
   Future<List<ProductModel>> getAmazingProduct();
 
   Future<List<ProductModel>> getMostSellProduct();
+  Future<List<ProductModel>> searchProducts(String query);
 }
 
 class HomeDataSource extends IHomeDataSource {
@@ -56,7 +57,6 @@ class HomeDataSource extends IHomeDataSource {
         return ProductModel(
             id: e.id,
             pId: e['pId'],
-
             catId: e['catId'],
             title: e['title'],
             image: e['image'],
@@ -100,5 +100,33 @@ class HomeDataSource extends IHomeDataSource {
       debugPrint("----------------------$e");
       throw Exception(e.toString());
     }
+  }
+
+  Future<List<ProductModel>> searchProducts(String query) async {
+
+    Query queryRef = FirebaseFirestore.instance
+        .collection('products')
+        .where('name',
+            isGreaterThanOrEqualTo:
+                query)
+        .where('name',
+            isLessThanOrEqualTo:
+                '$query\uf8ff');
+    final snapshot = await queryRef.get();
+
+
+    return snapshot.docs.map((e) {
+      return ProductModel(
+          id: e.id,
+          pId: e['pId'],
+          catId: e['catId'],
+          title: e['title'],
+          image: e['image'],
+          price: e['price'],
+          discount: e['discount'],
+          count: e['count'],
+          isHot: e['isHot'],
+          mostSell: e['mostSell']);
+    }).toList();
   }
 }

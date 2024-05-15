@@ -52,6 +52,9 @@ class RegisterController {
           case 'invalid-email':
           ShowToast.ShowMessage('این ایمیل نامعتبر است!');
           break;
+          case 'network-request-failed':
+          ShowToast.ShowMessage('خطا در برقراری ارتباط');
+          break;
 
       }
 

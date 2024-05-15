@@ -11,6 +11,7 @@ import 'package:untitled2/pages/home_page/data/data_source.dart';
 import 'package:untitled2/pages/home_page/data/repository.dart';
 import 'package:untitled2/pages/product_detail/data/data_source.dart';
 import 'package:untitled2/pages/product_detail/data/repository.dart';
+import 'package:untitled2/utils/image_handler.dart';
 
 var locator = GetIt.instance;
 
@@ -32,4 +33,7 @@ Future<void> serviveLocator() async {
   locator.registerSingleton<INextBasketRepo>(NextBasketRepository(locator()));
   locator.registerSingleton<BasketRepo>(BasketRemoteRepo(locator()));
 
+
+//     image picker
+locator.registerFactory<ImageHandler>(() =>ImageHandler());
 }

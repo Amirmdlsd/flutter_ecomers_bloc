@@ -13,6 +13,8 @@ abstract class IHomeRepository {
   Future<Either<String, List<ProductModel>>> getAmazingProduct();
 
   Future<Either<String, List<ProductModel>>> getMostSellProduct();
+
+  Future<Either<String, List<ProductModel>>> searchProducts(String query);
 }
 
 class HomeRepository extends IHomeRepository {
@@ -50,6 +52,17 @@ class HomeRepository extends IHomeRepository {
 
   @override
   Future<Either<String, List<ProductModel>>> getMostSellProduct() async {
+    try {
+      var response = await _dataSource.getMostSellProduct();
+      return right(response);
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, List<ProductModel>>> searchProducts(
+      String query) async {
     try {
       var response = await _dataSource.getMostSellProduct();
       return right(response);

@@ -19,3 +19,4 @@ class GetAllBasketItemState extends BasketState{
 
   GetAllBasketItemState(this.basket);
 }
+

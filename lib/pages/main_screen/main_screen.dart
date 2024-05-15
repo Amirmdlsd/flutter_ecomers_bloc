@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled2/pages/basket_screen/basket_screen.dart';
 import 'package:untitled2/pages/category_screen/category_screen.dart';
 import 'package:untitled2/pages/home_page/home_screen.dart';
@@ -21,10 +22,10 @@ class MainScreen extends StatelessWidget {
           body: SafeArea(
               child: IndexedStack(
                   index: context.read<MainBloc>().state.currentIndex,
-                  children: const [
-                HomeScreen(),
-                CategoryScreen(),
-                BasketScreen(),
+                  children:  [
+                const HomeScreen(),
+                const CategoryScreen(),
+                const BasketScreen(),
                 ProfileScreen()
               ])),
           bottomNavigationBar: BottomNavigationBar(
@@ -36,6 +37,7 @@ class MainScreen extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.grey,
+            selectedLabelStyle: TextStyle(fontSize: 14.sp),
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'خانه'),
               BottomNavigationBarItem(

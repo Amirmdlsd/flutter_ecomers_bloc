@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:untitled2/locator.dart';
+import 'package:untitled2/map/map_view.dart';
 import 'package:untitled2/pages/%20product_list/bloc/product_bloc.dart';
 import 'package:untitled2/pages/%20product_list/data/repository.dart';
 import 'package:untitled2/pages/%20product_list/product_list_screen.dart';
@@ -66,7 +67,9 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
-          theme: ThemeData(),
+          theme: ThemeData(
+
+          ),
           routes: {
             '/homePage': (context) => const HomeScreen(),
             '/mainScreen': (context) => const MainScreen(),
@@ -91,6 +94,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Ecomers',
           initialRoute: '/',
+        // home: MapView(),
         ),
       ),
     );

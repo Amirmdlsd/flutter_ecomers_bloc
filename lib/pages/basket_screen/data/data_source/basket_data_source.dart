@@ -10,6 +10,10 @@ abstract class IBasketDataSource {
   Future<void> addToBasket(ProductModel productModel);
 
   Future<List<BasketItemModel>> getBasketList();
+
+  Future<void> decreaseItemCount(num pId);
+
+  Future<void> deleteFromBasket(num pId);
 }
 
 class BasketRemoteDataSource extends IBasketDataSource {
@@ -20,13 +24,12 @@ class BasketRemoteDataSource extends IBasketDataSource {
 
       // Check if the product already exists in the basket
       var existingProduct = await response
-          .where('pId', isEqualTo: productModel.pId) // Changed 'id' to 'pId'
+          .where('pId', isEqualTo: productModel.pId)
           .where('userId', isEqualTo: AuthManager.getUId())
           .get();
 
       if (existingProduct.docs.isNotEmpty) {
-        // If the product exists, update the 'number' field
-        for(var i in  existingProduct.docs){
+        for (var i in existingProduct.docs) {
           await response.doc(i.id).update({
             'number': FieldValue.increment(1),
           });
@@ -34,7 +37,6 @@ class BasketRemoteDataSource extends IBasketDataSource {
 
         ShowToast.ShowMessage('تعداد محصول در سبد خرید افزایش یافت');
       } else {
-        // If the product does not exist, add it to the basket
         await response.add({
           'catId': productModel.catId,
           'count': productModel.count,
@@ -47,14 +49,13 @@ class BasketRemoteDataSource extends IBasketDataSource {
           'price': productModel.price,
           'title': productModel.title,
           'userId': AuthManager.getUId(),
-          'finalPrice':productModel.finalPrice
+          'finalPrice': productModel.finalPrice
         });
       }
     } catch (e) {
       ShowToast.ShowMessage(e.toString());
       throw Exception(e.toString());
     }
-
   }
 
   @override
@@ -84,6 +85,49 @@ class BasketRemoteDataSource extends IBasketDataSource {
     } catch (e) {
       ShowToast.ShowMessage(e.toString());
 
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> decreaseItemCount(num pId) async {
+    try {
+      var response = FirebaseFirestore.instance.collection('basket');
+
+      var existingProduct = await response
+          .where('pId', isEqualTo: pId)
+          .where('userId', isEqualTo: AuthManager.getUId())
+          .get();
+
+      if (existingProduct.docs.isNotEmpty) {
+        for (var e in existingProduct.docs) {
+          response.doc(e.id).update({'number': e['number'] - 1});
+        }
+      }
+    } catch (e) {
+      ShowToast.ShowMessage(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteFromBasket(num pId) async {
+    try {
+      var response = FirebaseFirestore.instance.collection('basket');
+
+      var snapshot = await response
+          .where('pId', isEqualTo: pId)
+          .where('userId', isEqualTo: AuthManager.getUId())
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+
+        for (var doc in snapshot.docs) {
+          await doc.reference.delete();
+        }
+      }
+    } catch (e) {
+      ShowToast.ShowMessage('خطایی رخ داده است');
       throw Exception(e.toString());
     }
   }

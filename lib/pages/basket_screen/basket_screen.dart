@@ -34,7 +34,7 @@ class _BasketScreenState extends State<BasketScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     BlocProvider.of<BasketBloc>(context).add(GetAllBasketDataEvent());
-    // BlocProvider.of<NextBasketBloc>(context).add(GetAllNextBasketEvent());
+    BlocProvider.of<NextBasketBloc>(context).add(GetAllNextBasketEvent());
   }
 
   @override
@@ -50,6 +50,8 @@ class _BasketScreenState extends State<BasketScreen>
                       pinned: true,
                       expandedHeight: 50.0.w,
                       title: TabBar(
+                          indicatorColor: Colors.red,
+                          labelColor: Colors.red,
                           controller: _tabController,
                           labelStyle: TextStyle(fontSize: 16.sp),
                           tabs: const [
@@ -71,132 +73,46 @@ class _BasketScreenState extends State<BasketScreen>
                   if (state is NextBasketLoadinState) {
                     return Center(
                         child: SizedBox(
-                            width: 30.w,
-                            child: const CircularProgressIndicator()));
-                  }
-                  if (state is NextBasketGetAllItem) {
-                    return SizedBox(
-                        child: ListView.builder(
-                      itemBuilder: (context, index) => state.basket.fold(
-                        (l) => Text(l),
-                        (r) {
-                          print(r.length.toString());
-                          return r.isNotEmpty
-                              ? SizedBox(
-                                  child: ListView.builder(
-                                    itemCount: 5,
-                                    itemBuilder: (context, index) => Container(
-                                      margin: EdgeInsets.only(
-                                          right: 20.w,
-                                          left: 20.w,
-                                          bottom: 10.h,
-                                          top: index == 0 ? 60.h : 0),
-                                      height: 160.h,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12.r),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                offset: const Offset(2, 1),
-                                                spreadRadius: .1,
-                                                blurRadius: .2)
-                                          ]),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                              width: 100.w,
-                                              child: CachedImage(
-                                                  imageUrl: r[index].image!)),
-                                          Expanded(
-                                              child: Column(
-                                            children: [
-                                              SizedBox(
-                                                  width: 200.w,
-                                                  child: Text(
-                                                    r[index].title!,
-                                                    style: TextStyle(
-                                                        fontSize: 14.sp),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  )),
-                                              SizedBox(height: 10.h),
-                                              Row(
-                                                children: [
-                                                  DiscountContainerWidget(
-                                                      text: r[index]
-                                                          .discount
-                                                          .toString()),
-                                                  SizedBox(width: 10.w),
-                                                  Text(
-                                                    r[index].price.toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .lineThrough,
-                                                        color: Colors.grey),
-                                                  ),
-                                                  SizedBox(width: 20.w),
-                                                  Text(
-                                                    " ${r[index].finalPrice} تومان",
-                                                    style: TextStyle(
-                                                        fontSize: 14.sp,
-                                                        color: Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: 200.w,
-                                                height: 40.h,
-                                                child: ElevatedButtonWidget(
-                                                    bg: Colors.red,
-                                                    lable: 'حذف از لیست',
-                                                    onTap: () {
-                                                      debugPrint(
-                                                          'pId is ${r[index].pId}');
-                                                      context
-                                                          .read<
-                                                              NextBasketBloc>()
-                                                          .add(
-                                                              RemoveFromNextBasketEvent(
-                                                                  index));
-                                                    }),
-                                              ),
-                                              SizedBox(
-                                                width: 300.w,
-                                                height: 45.h,
-                                                child: ElevatedButtonWidget(
-                                                    lable: 'افزودن به سبدخرید',
-                                                    onTap: () {}),
-                                              ),
-                                            ],
-                                          ))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text("سبدخرید خالی است")],
-                                );
-                        },
-                      ),
+                      width: 20.h,
+                      child: const CircularProgressIndicator(),
                     ));
                   }
-                  return Container();
+                  if (state is NextBasketGetAllItem) {
+                    return state.basket.fold(
+                        (l) => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text("تلاش مجدد"),
+                                SizedBox(height: 10.h),
+                                ElevatedButtonWidget(
+                                    lable: "تلاش مجدد", onTap: () {})
+                              ],
+                            ), (r) {
+                      return r.isNotEmpty
+                          ? NextBasketItemWidget(r: r)
+                          : const Center(
+                              child: Text('سبدخرید خالی است'),
+                            );
+                    });
+                  }
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("تلاش مجدد"),
+                      SizedBox(height: 10.h),
+                      ElevatedButtonWidget(lable: "تلاش مجدد", onTap: () {})
+                    ],
+                  );
                 },
               ),
 
+              //   basket list
               BlocBuilder<BasketBloc, BasketState>(builder: (context, state) {
                 if (state is BasketLoadingState) {
                   return Center(
                       child: SizedBox(
-                    width: 20.h,
+                    width: 30.h,
+                    height: 30.h,
                     child: const CircularProgressIndicator(),
                   ));
                 }
@@ -271,25 +187,45 @@ class _BasketScreenState extends State<BasketScreen>
                                               ),
                                               TextButton(
                                                   onPressed: () {
-                                                    context.read<NextBasketBloc>().add(
-                                                        AddToNextBasketEvent(
+                                                    context
+                                                        .read<NextBasketBloc>()
+                                                        .add(AddToNextBasketEvent(
                                                             BasketModel(
                                                                 title: r[index]
                                                                     .title,
-                                                                image: r[index]
-                                                                    .image,
-                                                                catId: r[index]
-                                                                    .catId,
+                                                                image:
+                                                                    r[
+                                                                            index]
+                                                                        .image,
+                                                                catId:
+                                                                    r[index]
+                                                                        .catId,
                                                                 discount: r[
                                                                         index]
                                                                     .discount,
-                                                                price: r[index]
-                                                                    .price,
+                                                                price:
+                                                                    r[index]
+                                                                        .price,
                                                                 mostSell: r[
                                                                         index]
                                                                     .mostSell,
                                                                 isHot: r[index]
-                                                                    .isHot)));
+                                                                    .isHot,
+                                                                finalPrice: r[
+                                                                        index]
+                                                                    .finalPrice
+                                                                    .toDouble())));
+                                                    context
+                                                        .read<
+                                                        BasketBloc>()
+                                                        .add(DeleteItemEvent(
+                                                        r[index]
+                                                            .pId));
+                                                    context
+                                                        .read<
+                                                        BasketBloc>()
+                                                        .add(
+                                                        GetAllBasketDataEvent());
                                                   },
                                                   child: const Text(
                                                       'افزودن به سبدخریدبعدی')),
@@ -342,9 +278,38 @@ class _BasketScreenState extends State<BasketScreen>
                                                       .number
                                                       .toString()),
                                                   IconButton(
-                                                      onPressed: () {},
-                                                      icon: const Icon(
-                                                          Icons.remove))
+                                                      onPressed: () {
+                                                        if (r[index].number >
+                                                            1) {
+                                                          context
+                                                              .read<
+                                                                  BasketBloc>()
+                                                              .add(DecreaseCounterEvent(
+                                                                  r[index]
+                                                                      .pId));
+                                                          context
+                                                              .read<
+                                                                  BasketBloc>()
+                                                              .add(
+                                                                  GetAllBasketDataEvent());
+                                                        } else {
+                                                          context
+                                                              .read<
+                                                                  BasketBloc>()
+                                                              .add(DeleteItemEvent(
+                                                                  r[index]
+                                                                      .pId));
+                                                          context
+                                                              .read<
+                                                                  BasketBloc>()
+                                                              .add(
+                                                                  GetAllBasketDataEvent());
+                                                        }
+                                                      },
+                                                      icon: Icon(
+                                                          r[index].number == 1
+                                                              ? Icons.delete
+                                                              : Icons.remove))
                                                 ],
                                               )
                                             ],
@@ -365,6 +330,93 @@ class _BasketScreenState extends State<BasketScreen>
               })
             ]),
           )),
+    );
+  }
+}
+
+class NextBasketItemWidget extends StatelessWidget {
+  const NextBasketItemWidget({super.key, required this.r});
+
+  final List<BasketModel> r;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: ListView.builder(
+        itemCount: r.length,
+        itemBuilder: (context, index) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            margin: EdgeInsets.only(
+                right: 30.w, left: 30.w, top: index == 0 ? 20.w : 10.h),
+            height: 150.h,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(.3),
+                    offset: const Offset(1, 1),
+                    blurRadius: 1,
+                    spreadRadius: 1)
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 100.w,
+                  height: double.infinity,
+                  child: CachedImage(imageUrl: r[index].image!),
+                ),
+                SizedBox(
+                  width: 15.w,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            r[index].title!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(fontSize: 14.sp),
+                          )),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            DiscountContainerWidget(
+                                text: '5${r[index].discount}'),
+                            Text(
+                              '${r[index].price}',
+                              style: const TextStyle(
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.lineThrough),
+                            )
+                          ]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${r[index].finalPrice} تومان'),
+                            IconButton(
+                                onPressed: () {
+                                  context
+                                      .read<NextBasketBloc>()
+                                      .add(RemoveFromNextBasketEvent(index));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                )),
+                          ]),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
