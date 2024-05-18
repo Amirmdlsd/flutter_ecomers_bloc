@@ -13,11 +13,11 @@ class ProfileItemChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Material(
-        borderRadius: BorderRadius.circular(12.r),
-        elevation: 1,
-        child: GestureDetector(
-          onTap: onTap,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Material(
+          borderRadius: BorderRadius.circular(12.r),
+          elevation: 1,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(

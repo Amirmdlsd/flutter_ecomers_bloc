@@ -20,9 +20,10 @@ class AppTextFieldWidget extends StatelessWidget {
       width: double.infinity,
       height: 40.h,
       decoration: BoxDecoration(
+
           border:
               Border(bottom: BorderSide(color: Colors.grey.withOpacity(.5))),
-          color: Colors.white),
+          color: Colors.transparent),
       margin: EdgeInsets.only(right: 30.w, left: 30.w, top: 10.h),
       child: Row(
         children: [
